@@ -6,14 +6,14 @@ id = "libredb_studio"
 name = "LibreDB Studio"
 description.en = "Web SQL client for 16 database engines, with schema browser, ER diagrams and query editor"
 
-version = "0.16.1~ynh1"
+version = "0.16.1~ynh2"
 
 maintainers = ["yusuf-gundogdu"]
 
 [upstream]
 license = "MIT"
 website = "https://libredb.org"
-demo = "https://trial.libredb.org"
+demo = "https://app.libredb.org"
 admindoc = "https://libredb.org/helper/"
 code = "https://github.com/libredb/libredb-studio"
 
