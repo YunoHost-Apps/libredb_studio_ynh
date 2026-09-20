@@ -30,13 +30,15 @@ multi_instance = false
 ldap = false
 sso = false
 
-# Disk: the payload unpacks to 303 MB (measured on the 0.16.1 linux-x64 archive)
-# and `n` adds a Node 24 runtime on top of that. Nothing is compiled at install
-# time, so the build figure is just the unpack. The runtime figure is still a
-# placeholder and has to be corrected against what the CI reports.
-disk = "500M"
+# Measured on a YunoHost 12.1.41 instance after install, upgrade and restore:
+# 292 MB in install_dir, 407 MB for the Node 24 runtime `n` fetches, and the
+# data directory starts at 1 MB and grows with what you save. The runtime
+# figure is RSS with the two sample databases open; a wide result set is held
+# in memory while it is assembled, so the headroom above 94 MB is deliberate.
+# Nothing is compiled at install time, so the build figure is just the unpack.
+disk = "800M"
 ram.build = "50M"
-ram.runtime = "400M"
+ram.runtime = "250M"
 
 [install]
     [install.domain]

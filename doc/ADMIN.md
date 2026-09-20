@@ -14,7 +14,11 @@ The signing secret is kept in the app's YunoHost settings rather than generated 
 yunohost service log __APP__
 ```
 
-The service writes to `/var/log/__APP__/__APP__.log`, which is rotated.
+The service writes to `/var/log/__APP__/__APP__.log`, which is rotated. That is
+the only place its output goes: `journalctl -u __APP__` shows the unit starting
+and stopping but carries none of the application's own lines, because the unit
+sends stdout to the file rather than to the journal. It is the file that the
+first-run password is in.
 
 ## What it can reach
 
