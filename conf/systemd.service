@@ -19,7 +19,12 @@ RestartSec=5
 # the journal is what makes the --log path declared in `yunohost service add`
 # true, so `yunohost service log` and logrotate both have something to read.
 # systemd creates the directory and grants the unit write access to it.
+# 0027, not the default 0022: the first run prints the generated administrator
+# password to this file once, and the default would leave it world-readable for
+# every local account on the machine. The directory is closed the same way.
+UMask=0027
 LogsDirectory=__APP__
+LogsDirectoryMode=0750
 StandardOutput=append:/var/log/__APP__/__APP__.log
 StandardError=inherit
 
@@ -31,7 +36,11 @@ ProtectSystem=strict
 # afford: YunoHost puts data_dir under /home/yunohost.app, and hiding /home
 # would take the SQLite store and the generated credentials with it.
 ProtectHome=false
-ReadWritePaths=__DATA_DIR__
+# The leading dash keeps a missing path from being fatal. Without it, a data
+# directory that is not there yet (an unmounted /home on a split-disk machine)
+# fails the namespace setup and the unit restart-loops on 226/NAMESPACE instead
+# of starting and seeding itself.
+ReadWritePaths=-__DATA_DIR__
 PrivateTmp=yes
 PrivateDevices=yes
 ProtectKernelTunables=yes
