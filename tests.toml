@@ -1,0 +1,15 @@
+#:schema https://raw.githubusercontent.com/YunoHost/apps/master/schemas/tests.v1.schema.json
+
+test_format = 1.0
+
+[default]
+
+    # The app installs at a domain root only: the payload is prebuilt and its
+    # route prefix is fixed at build time, so a sub-path install would 404 on
+    # every asset. There is no path argument to vary.
+
+    # -------------------------------
+    # Commits to test upgrade from
+    # -------------------------------
+
+    # Nothing to list yet: 0.16.1~ynh1 is the first packaged version.

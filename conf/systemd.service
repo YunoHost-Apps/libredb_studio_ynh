@@ -1,0 +1,55 @@
+[Unit]
+Description=LibreDB Studio - web-based SQL client
+Documentation=https://github.com/libredb/libredb-studio
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=__APP__
+Group=__APP__
+WorkingDirectory=__INSTALL_DIR__/
+Environment="PATH=__PATH_WITH_NODEJS__"
+EnvironmentFile=__INSTALL_DIR__/.env
+ExecStart=__NODEJS_DIR__/node __INSTALL_DIR__/server.js
+Restart=on-failure
+RestartSec=5
+
+# The service writes to stdout. Sending that to a real file rather than only to
+# the journal is what makes the --log path declared in `yunohost service add`
+# true, so `yunohost service log` and logrotate both have something to read.
+# systemd creates the directory and grants the unit write access to it.
+LogsDirectory=__APP__
+StandardOutput=append:/var/log/__APP__/__APP__.log
+StandardError=inherit
+
+# Hardening. The service listens on loopback and writes one directory; it has
+# no reason to reach anything else on the filesystem.
+NoNewPrivileges=yes
+ProtectSystem=strict
+# Not ProtectHome=yes, which the hardened unit in the project's own .deb can
+# afford: YunoHost puts data_dir under /home/yunohost.app, and hiding /home
+# would take the SQLite store and the generated credentials with it.
+ProtectHome=false
+ReadWritePaths=__DATA_DIR__
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+RestrictNamespaces=yes
+LockPersonality=yes
+# V8 compiles to memory it then executes, so this one stays off deliberately.
+# Turning it on stops the process at startup.
+MemoryDenyWriteExecute=no
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+SystemCallArchitectures=native
+CapabilityBoundingSet=
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,73 @@
+#!/bin/bash
+
+source _common.sh
+source /usr/share/yunohost/helpers
+
+#=================================================
+# INSTALL DEPENDENCIES
+#=================================================
+ynh_script_progression "Installing dependencies..."
+
+ynh_nodejs_install
+
+#=================================================
+# GENERATE THE SIGNING SECRET
+#=================================================
+# Kept in the app settings rather than left to the first run, so that an
+# upgrade, a restore or a rebuilt env file does not invalidate every session.
+# The administrator password is deliberately NOT generated here: the server
+# generates it on first run and prints it once. Putting it in a setting would
+# leave a working password sitting in the app's configuration for as long as
+# the app exists, which is a worse trade than one line in the journal.
+
+jwt_secret=$(ynh_string_random --length=48)
+ynh_app_setting_set --key=jwt_secret --value="$jwt_secret"
+
+#=================================================
+# DOWNLOAD, CHECK AND UNPACK SOURCE
+#=================================================
+ynh_script_progression "Setting up source files..."
+
+ynh_setup_source --dest_dir="$install_dir"
+
+chown -R "$app:$app" "$install_dir"
+chown -R "$app:$app" "$data_dir"
+chmod 700 "$data_dir"
+
+#=================================================
+# ADD A CONFIGURATION
+#=================================================
+ynh_script_progression "Adding $app's configuration..."
+
+ynh_config_add --template="env" --destination="$install_dir/.env"
+
+chown "$app:$app" "$install_dir/.env"
+chmod 600 "$install_dir/.env"
+
+#=================================================
+# SYSTEM CONFIGURATION
+#=================================================
+ynh_script_progression "Adding system configurations related to $app..."
+
+ynh_config_add_nginx
+
+ynh_config_add_systemd
+
+yunohost service add "$app" --description="Web SQL client for 16 database engines" --log="/var/log/$app/$app.log"
+
+ynh_config_add_logrotate
+
+#=================================================
+# START SYSTEMD SERVICE
+#=================================================
+ynh_script_progression "Starting $app's systemd service..."
+
+# The banner the server prints once it is listening. It carries the version, so
+# match only the part that does not move.
+ynh_systemctl --service="$app" --action="start" --log_path="/var/log/$app/$app.log" --wait_until="LibreDB Studio"
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression "Installation of $app completed"
