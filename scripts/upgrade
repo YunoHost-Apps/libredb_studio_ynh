@@ -1,6 +1,5 @@
 #!/bin/bash
 
-source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -13,31 +12,17 @@ ynh_systemctl --service="$app" --action="stop" --log_path="systemd"
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
-# The signing secret moved into the app settings so that sessions survive an
-# upgrade. An install from before that has none; generate one now rather than
-# letting the first run write a fresh one into the data directory on every
-# upgrade, which would log everybody out each time.
-
 if [ -z "${jwt_secret:-}" ]; then
     jwt_secret=$(ynh_string_random --length=48)
     ynh_app_setting_set --key=jwt_secret --value="$jwt_secret"
 fi
 
 #=================================================
-# INSTALL DEPENDENCIES
-#=================================================
-ynh_script_progression "Upgrading dependencies..."
-
-ynh_nodejs_install
-
-#=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 ynh_script_progression "Upgrading source files..."
 
-# --full_replace because the payload ships a node_modules tree: a file that an
-# older release carried and this one dropped would otherwise stay behind and be
-# resolved. The data directory is a separate resource and is not touched here.
+# --full_replace: a dropped file would otherwise stay in node_modules.
 ynh_setup_source --dest_dir="$install_dir" --full_replace
 
 chown -R "$app:$app" "$install_dir"

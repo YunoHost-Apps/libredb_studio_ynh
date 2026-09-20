@@ -1,6 +1,5 @@
 #!/bin/bash
 
-source _common.sh
 source /usr/share/yunohost/helpers
 
 ynh_print_info "Declaring files to be backed up..."
@@ -14,9 +13,7 @@ ynh_backup "$install_dir"
 #=================================================
 # BACKUP THE DATA DIR
 #=================================================
-# The SQLite store, the sample databases and the generated credentials. Not
-# --is_big: losing it loses every saved connection and the administrator
-# account, so it belongs in the archive even when the archive is large.
+# Not --is_big: it holds every saved connection and the administrator account.
 
 ynh_backup "$data_dir"
 

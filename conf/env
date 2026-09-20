@@ -1,21 +1,12 @@
-# Environment for LibreDB Studio, rendered by the install script.
-# Read by systemd as root before privileges drop.
 NODE_ENV=production
 NEXT_TELEMETRY_DISABLED=1
 
 PORT=__PORT__
-# server.js binds whatever HOSTNAME says. An inherited non-empty value is a
-# real trap on other platforms, so it is set explicitly here: nginx is the only
-# thing that should reach the application.
 HOSTNAME=127.0.0.1
 
-# The application derives its data directory from the dirname of this path, and
-# keeps the SQLite store, the sample databases and auth-bootstrap.json there.
-# It must stay absolute: server.js chdirs to the payload directory, so a
-# relative path would resolve inside install_dir, which an upgrade replaces.
+# Absolute, and the app takes its data directory from this path's dirname.
+# server.js chdirs to the payload, so a relative path would land in install_dir.
 STORAGE_PROVIDER=sqlite
 STORAGE_SQLITE_PATH=__DATA_DIR__/libredb-storage.db
 
-# Set here so sessions survive an upgrade. With it set, the first run still
-# generates the administrator password and prints it once; see doc/POST_INSTALL.
 JWT_SECRET=__JWT_SECRET__

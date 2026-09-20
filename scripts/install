@@ -1,24 +1,12 @@
 #!/bin/bash
 
-source _common.sh
 source /usr/share/yunohost/helpers
-
-#=================================================
-# INSTALL DEPENDENCIES
-#=================================================
-ynh_script_progression "Installing dependencies..."
-
-ynh_nodejs_install
 
 #=================================================
 # GENERATE THE SIGNING SECRET
 #=================================================
-# Kept in the app settings rather than left to the first run, so that an
-# upgrade, a restore or a rebuilt env file does not invalidate every session.
-# The administrator password is deliberately NOT generated here: the server
-# generates it on first run and prints it once. Putting it in a setting would
-# leave a working password sitting in the app's configuration for as long as
-# the app exists, which is a worse trade than one line in the journal.
+# In the settings, so an upgrade or a restore does not end every session. The
+# administrator password is left to the server, which prints it once.
 
 jwt_secret=$(ynh_string_random --length=48)
 ynh_app_setting_set --key=jwt_secret --value="$jwt_secret"
@@ -62,8 +50,6 @@ ynh_config_add_logrotate
 #=================================================
 ynh_script_progression "Starting $app's systemd service..."
 
-# The banner the server prints once it is listening. It carries the version, so
-# match only the part that does not move.
 ynh_systemctl --service="$app" --action="start" --log_path="/var/log/$app/$app.log" --wait_until="LibreDB Studio"
 
 #=================================================

@@ -15,31 +15,18 @@ ExecStart=__NODEJS_DIR__/node __INSTALL_DIR__/server.js
 Restart=on-failure
 RestartSec=5
 
-# The service writes to stdout. Sending that to a real file rather than only to
-# the journal is what makes the --log path declared in `yunohost service add`
-# true, so `yunohost service log` and logrotate both have something to read.
-# systemd creates the directory and grants the unit write access to it.
-# 0027, not the default 0022: the first run prints the generated administrator
-# password to this file once, and the default would leave it world-readable for
-# every local account on the machine. The directory is closed the same way.
+# The first run prints the generated administrator password to this file.
 UMask=0027
 LogsDirectory=__APP__
 LogsDirectoryMode=0750
 StandardOutput=append:/var/log/__APP__/__APP__.log
 StandardError=inherit
 
-# Hardening. The service listens on loopback and writes one directory; it has
-# no reason to reach anything else on the filesystem.
 NoNewPrivileges=yes
 ProtectSystem=strict
-# Not ProtectHome=yes, which the hardened unit in the project's own .deb can
-# afford: YunoHost puts data_dir under /home/yunohost.app, and hiding /home
-# would take the SQLite store and the generated credentials with it.
+# data_dir is under /home/yunohost.app.
 ProtectHome=false
-# The leading dash keeps a missing path from being fatal. Without it, a data
-# directory that is not there yet (an unmounted /home on a split-disk machine)
-# fails the namespace setup and the unit restart-loops on 226/NAMESPACE instead
-# of starting and seeding itself.
+# Leading dash: an unmounted /home would restart-loop on 226.
 ReadWritePaths=-__DATA_DIR__
 PrivateTmp=yes
 PrivateDevices=yes
@@ -53,11 +40,13 @@ RestrictSUIDSGID=yes
 RestrictRealtime=yes
 RestrictNamespaces=yes
 LockPersonality=yes
-# V8 compiles to memory it then executes, so this one stays off deliberately.
-# Turning it on stops the process at startup.
+# V8 executes memory it wrote; yes stops the process at startup.
 MemoryDenyWriteExecute=no
 RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
 SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged @resources @obsolete
+SystemCallErrorNumber=EPERM
 CapabilityBoundingSet=
 
 [Install]

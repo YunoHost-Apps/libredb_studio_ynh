@@ -23,19 +23,10 @@ helpers_version = "2.1"
 architectures = ["amd64", "arm64"]
 multi_instance = false
 
-# The application has its own account system, with local password login, OIDC
-# and per-account TOTP. It does not read an LDAP directory and it does not
-# consume the SSO headers, so declaring either would promise something the
-# build cannot do.
 ldap = false
 sso = false
 
-# Measured on a YunoHost 12.1.41 instance after install, upgrade and restore:
-# 292 MB in install_dir, 407 MB for the Node 24 runtime `n` fetches, and the
-# data directory starts at 1 MB and grows with what you save. The runtime
-# figure is RSS with the two sample databases open; a wide result set is held
-# in memory while it is assembled, so the headroom above 94 MB is deliberate.
-# Nothing is compiled at install time, so the build figure is just the unpack.
+# Measured on 12.1.41: 292 MB unpacked, 407 MB for the Node tree, 94 MB RSS.
 disk = "800M"
 ram.build = "50M"
 ram.runtime = "250M"
@@ -56,22 +47,19 @@ ram.runtime = "250M"
     arm64.url = "https://github.com/libredb/libredb-studio/releases/download/0.16.1/libredb-studio-standalone-0.16.1-linux-arm64.tar.gz"
     arm64.sha256 = "b7ee625001d1949a62ff695e29b4e6d20b12a9c9565fd6d549eb26923fb1123d"
 
-    # Anchored at both ends deliberately. The release publishes 28 assets and
-    # several share this prefix; an unanchored pattern would start matching a
-    # sibling the day one is added next to the archive. Checked against the
-    # 0.16.1 asset list: one match each.
+    # Anchored: 28 assets are published and several share this prefix.
     autoupdate.strategy = "latest_github_release"
     autoupdate.asset.amd64 = "^libredb-studio-standalone-.*-linux-x64\\.tar\\.gz$"
     autoupdate.asset.arm64 = "^libredb-studio-standalone-.*-linux-arm64\\.tar\\.gz$"
+
+    [resources.nodejs]
+    version = "24"
 
     [resources.system_user]
 
     [resources.install_dir]
 
-    # The SQLite store, the sample databases and the generated credentials live
-    # here rather than in install_dir, because an upgrade replaces install_dir
-    # wholesale. The application derives this directory from the dirname of
-    # STORAGE_SQLITE_PATH, which conf/env sets to an absolute path under it.
+    # An upgrade replaces install_dir wholesale; the store lives here instead.
     [resources.data_dir]
 
     [resources.permissions]
