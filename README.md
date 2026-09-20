@@ -19,6 +19,10 @@ Web SQL client for 16 database engines, with schema browser, ER diagrams and que
 <a href="https://github.com/YunoHost-Apps/libredb_studio_ynh/issues"><img height="100px" src="https://github.com/YunoHost/yunohost-artwork/raw/refs/heads/main/badges/neopossum-badges/badge_report_an_issue.svg"/></a>
 </div>
 
+
+## Screenshots
+![Screenshot of LibreDB Studio](./doc/screenshots/workspace.jpg)
+
 ## 📦 Developer info
 
 [![Automatic tests level](https://apps.yunohost.org/badge/cilevel/libredb_studio)](https://ci-apps.yunohost.org/ci/apps/libredb_studio/)
@@ -36,11 +40,6 @@ sudo yunohost app install https://github.com/YunoHost-Apps/libredb_studio_ynh/tr
 sudo yunohost app upgrade libredb_studio -u https://github.com/YunoHost-Apps/libredb_studio_ynh/tree/testing
 ```
 
-You can also switch to the testing branch to update from testing by default (as same as for APT when you chose to use a testing repos) with this command:
-```bash
-sudo yunohost app setting libredb_studio upgrade_channel -v testing
-```
-
 ### 📚 App packaging documentation
 
-Please see <https://doc.yunohost.org/dev/packaging/> for more information.
+Please see <https://doc.yunohost.org/packaging_apps> for more information.
