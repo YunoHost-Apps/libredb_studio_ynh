@@ -18,7 +18,7 @@ admindoc = "https://libredb.org/helper/"
 code = "https://github.com/libredb/libredb-studio"
 
 [integration]
-yunohost = ">= 12.0.9"
+yunohost = ">= 12.1.40"
 helpers_version = "2.1"
 architectures = ["amd64", "arm64"]
 multi_instance = false
