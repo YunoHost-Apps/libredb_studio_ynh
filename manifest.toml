@@ -13,7 +13,7 @@ maintainers = ["yusuf-gundogdu"]
 [upstream]
 license = "MIT"
 website = "https://libredb.org"
-demo = "https://trial.libredb.org"
+demo = "https://app.libredb.org"
 admindoc = "https://libredb.org/helper/"
 code = "https://github.com/libredb/libredb-studio"
 
