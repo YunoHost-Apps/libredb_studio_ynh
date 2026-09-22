@@ -11,7 +11,7 @@ It shall NOT be edited by hand.
 Web SQL client for 16 database engines, with schema browser, ER diagrams and query editor
 
 [![🌐 Official app website](https://img.shields.io/badge/Official_app_website-darkgreen?style=for-the-badge)](https://libredb.org)
-[![App Demo](https://img.shields.io/badge/App_Demo-blue?style=for-the-badge)](https://trial.libredb.org)
+[![App Demo](https://img.shields.io/badge/App_Demo-blue?style=for-the-badge)](https://app.libredb.org)
 [![Version: 0.16.2~ynh1](https://img.shields.io/badge/Version-0.16.2~ynh1-rgb(18,138,11)?style=for-the-badge)](https://ci-apps.yunohost.org/ci/apps/libredb_studio/)
 
 <div align="center">
