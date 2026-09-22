@@ -1,5 +1,5 @@
 [Unit]
-Description=LibreDB Studio - web-based SQL client
+Description=LibreDB Studio: web-based SQL client
 Documentation=https://github.com/libredb/libredb-studio
 After=network-online.target
 Wants=network-online.target

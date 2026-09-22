@@ -52,9 +52,6 @@ ram.runtime = "250M"
     autoupdate.asset.amd64 = "^libredb-studio-standalone-.*-linux-x64\\.tar\\.gz$"
     autoupdate.asset.arm64 = "^libredb-studio-standalone-.*-linux-arm64\\.tar\\.gz$"
 
-    [resources.nodejs]
-    version = "24"
-
     [resources.system_user]
 
     [resources.install_dir]
@@ -66,3 +63,7 @@ ram.runtime = "250M"
     main.url = "/"
 
     [resources.ports]
+
+    [resources.nodejs]
+    version = "24"
+    
