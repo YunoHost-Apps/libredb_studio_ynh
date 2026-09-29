@@ -1,6 +1,6 @@
 LibreDB Studio is a web SQL client you run on your own server. You open it in a browser, add a connection, and work against the database from there: browse the schema, read and edit rows in a grid, write queries with completion, read EXPLAIN plans, and draw an ER diagram of what you are looking at.
 
-It speaks 16 engines through their own drivers, including PostgreSQL, MySQL and MariaDB, SQLite and libSQL, SQL Server, Oracle, MongoDB, Redis, ClickHouse and DuckDB.
+It speaks 18 engines, including PostgreSQL, MySQL and MariaDB, SQLite and libSQL, SQL Server, Oracle, MongoDB, Redis, ClickHouse and DuckDB. Two of the 18 are read-only: Prometheus answers PromQL over its HTTP API, and Apache Kafka is read over its own protocol.
 
 Two things are worth knowing before you install it:
 
