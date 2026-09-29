@@ -12,7 +12,7 @@ Web SQL client for 16 database engines, with schema browser, ER diagrams and que
 
 [![🌐 Official app website](https://img.shields.io/badge/Official_app_website-darkgreen?style=for-the-badge)](https://libredb.org)
 [![App Demo](https://img.shields.io/badge/App_Demo-blue?style=for-the-badge)](https://app.libredb.org)
-[![Version: 0.16.2~ynh1](https://img.shields.io/badge/Version-0.16.2~ynh1-rgb(18,138,11)?style=for-the-badge)](https://ci-apps.yunohost.org/ci/apps/libredb_studio/)
+[![Version: 0.17.0~ynh1](https://img.shields.io/badge/Version-0.17.0~ynh1-rgb(18,138,11)?style=for-the-badge)](https://ci-apps.yunohost.org/ci/apps/libredb_studio/)
 
 <div align="center">
 <a href="https://apps.yunohost.org/app/libredb_studio"><img height="100px" src="https://github.com/YunoHost/yunohost-artwork/raw/refs/heads/main/badges/neopossum-badges/badge_more_info_on_the_appstore.svg"/></a>
