@@ -34,7 +34,7 @@ ynh_config_add_nginx
 
 ynh_config_add_systemd
 
-yunohost service add "$app" --description="Web SQL client for 16 database engines" --log="/var/log/$app/$app.log"
+yunohost service add "$app" --description="Web SQL client for 18 database engines" --log="/var/log/$app/$app.log"
 
 ynh_config_add_logrotate
 
