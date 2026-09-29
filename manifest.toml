@@ -4,7 +4,7 @@ packaging_format = 2
 
 id = "libredb_studio"
 name = "LibreDB Studio"
-description.en = "Web SQL client for 16 database engines, with schema browser, ER diagrams and query editor"
+description.en = "Web SQL client for 18 database engines, with schema browser, ER diagrams and query editor"
 
 version = "0.17.0~ynh1"
 

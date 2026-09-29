@@ -8,7 +8,7 @@ It shall NOT be edited by hand.
   LibreDB Studio, packaged for YunoHost
 </h1>
 
-Web SQL client for 16 database engines, with schema browser, ER diagrams and query editor
+Web SQL client for 18 database engines, with schema browser, ER diagrams and query editor
 
 [![🌐 Official app website](https://img.shields.io/badge/Official_app_website-darkgreen?style=for-the-badge)](https://libredb.org)
 [![App Demo](https://img.shields.io/badge/App_Demo-blue?style=for-the-badge)](https://app.libredb.org)
