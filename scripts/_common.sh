@@ -28,6 +28,16 @@ _postgresql_is_running() {
     systemctl --quiet is-active "postgresql@$PSQL_VERSION-main.service"
 }
 
+# A database name as a psql --dbname value. psql reads a value that contains
+# '=' as a conninfo string, so every name goes in as dbname='...', with a
+# backslash and a single quote escaped by a backslash, as conninfo requires.
+_psql_dbname() {
+    local name="$1"
+    name=${name//\\/\\\\}
+    name=${name//\'/\\\'}
+    printf "dbname='%s'" "$name"
+}
+
 # psql as postgres, stopping at the first failed statement: without ON_ERROR_STOP
 # psql exits 0 after one.
 _psql() {
@@ -43,14 +53,12 @@ _mariadb_admin_ensure() {
         ynh_app_setting_set --key=mysql_admin_pwd --value="$mysql_admin_pwd"
     fi
 
-    # ALTER when the account is already there: a restore brings the password
-    # back from the settings, and the account may have outlived a removal.
-    # Passwords go to mysql on stdin, never in its arguments.
-    if ynh_mysql_user_exists "$mysql_admin_user"; then
-        mysql --batch <<< "ALTER USER '$mysql_admin_user'@'localhost' IDENTIFIED BY '$mysql_admin_pwd';"
-    else
-        ynh_mysql_create_user "$mysql_admin_user" "$mysql_admin_pwd"
-    fi
+    # The account at localhost only: one of the same name on another host is a
+    # different account. ALTER sets the password every time, because a restore
+    # brings it back from the settings and the account may have outlived a
+    # removal. Passwords go to mysql on stdin, never in its arguments.
+    mysql --batch <<< "CREATE USER IF NOT EXISTS '$mysql_admin_user'@'localhost';"
+    mysql --batch <<< "ALTER USER '$mysql_admin_user'@'localhost' IDENTIFIED BY '$mysql_admin_pwd';"
     mysql --batch <<< "GRANT ALL PRIVILEGES ON *.* TO '$mysql_admin_user'@'localhost' WITH GRANT OPTION;"
 
     # Read by the seed template through ynh_config_add --jinja.
@@ -260,7 +268,7 @@ _db_admins_drop() {
                 names=$(_psql --dbname=postgres --tuples-only --no-align --command="SELECT datname FROM pg_database WHERE datallowconn;")
                 while IFS= read -r database; do
                     [ -n "$database" ] || continue
-                    _psql --dbname="$database" <<< "REASSIGN OWNED BY \"$psql_admin_user\" TO postgres; DROP OWNED BY \"$psql_admin_user\";"
+                    _psql --dbname="$(_psql_dbname "$database")" <<< "REASSIGN OWNED BY \"$psql_admin_user\" TO postgres; DROP OWNED BY \"$psql_admin_user\";"
                 done <<< "$names"
                 _psql --dbname=postgres <<< "DROP ROLE \"$psql_admin_user\";"
             fi

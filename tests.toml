@@ -30,6 +30,7 @@ test_format = 1.0
     only = ["install.root", "backup_restore", "upgrade"]
 
     preinstall = """
+    sudo apt-get update
     sudo DEBIAN_FRONTEND=noninteractive apt-get install --yes mariadb-server
     sudo yunohost tools regen-conf mysql
     """
@@ -48,6 +49,7 @@ test_format = 1.0
     only = ["install.root", "backup_restore", "upgrade"]
 
     preinstall = """
+    sudo apt-get update
     sudo DEBIAN_FRONTEND=noninteractive apt-get install --yes postgresql
     sudo yunohost tools regen-conf postgresql
     """
