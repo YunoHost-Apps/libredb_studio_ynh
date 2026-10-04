@@ -6,7 +6,7 @@ id = "libredb_studio"
 name = "LibreDB Studio"
 description.en = "Web SQL client for 18 database engines, with schema browser, ER diagrams and query editor"
 
-version = "0.18.0~ynh1"
+version = "0.18.0~ynh2"
 
 maintainers = ["yusuf-gundogdu"]
 
@@ -35,8 +35,14 @@ ram.runtime = "250M"
     [install.domain]
     type = "domain"
 
+    [install.seed_databases]
+    ask.en = "Connect LibreDB Studio to this server's MariaDB and PostgreSQL?"
+    help.en = "Only a server that another app has already installed is used; the install fails if none is running. The package creates an administrator account on each one, able to read and change every database on it, and lists those databases in LibreDB Studio for its admin account only. Access to the app is then limited to the admins group at install, whatever you choose below."
+    type = "boolean"
+    default = false
+
     [install.init_main_permission]
-    help.en = "LibreDB Studio has its own login system, so YunoHost's SSO can be left off. The first run generates an administrator password and prints it once to the service log."
+    help.en = "LibreDB Studio has its own login system, so YunoHost's SSO can be left off. The first run generates an administrator password and prints it once to the service log. If you connect this server's databases above, this is set to admins."
     type = "group"
     default = "visitors"
 

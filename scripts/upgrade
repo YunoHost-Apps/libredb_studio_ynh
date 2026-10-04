@@ -1,5 +1,6 @@
 #!/bin/bash
 
+source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -18,6 +19,13 @@ if [ -z "${jwt_secret:-}" ]; then
     ynh_app_setting_set --key=jwt_secret --value="$jwt_secret"
 fi
 
+# 0.17.0~ynh1 and earlier had no seed_databases question: those installs keep
+# working exactly as before.
+if [ -z "${seed_databases:-}" ]; then
+    seed_databases=0
+    ynh_app_setting_set --key=seed_databases --value="$seed_databases"
+fi
+
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
@@ -27,11 +35,25 @@ ynh_script_progression "Upgrading source files..."
 ynh_setup_source --dest_dir="$install_dir" --full_replace
 
 #=================================================
+# CONNECT THIS SERVER'S DATABASES
+#=================================================
+# On every upgrade: a server installed since the last run is added, a database
+# created since is listed, and seed_databases set to 0 removes the accounts.
+# `yunohost app upgrade libredb_studio --force` runs it on demand. The
+# permission is left as the admin set it; a wider one than admins is reported.
+
+_seed_connections_configure
+
+if [ -n "$seed_config_path" ]; then
+    _main_permission_warn_if_wider
+fi
+
+#=================================================
 # UPDATE THE CONFIGURATION
 #=================================================
 ynh_script_progression "Updating configuration..."
 
-ynh_config_add --template="env" --destination="$install_dir/.env"
+ynh_config_add --jinja --template="env" --destination="$install_dir/.env"
 
 #=================================================
 # REAPPLY SYSTEM CONFIGURATIONS

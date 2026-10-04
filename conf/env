@@ -1,12 +1,24 @@
 NODE_ENV=production
 NEXT_TELEMETRY_DISABLED=1
 
-PORT=__PORT__
+PORT={{ port }}
 HOSTNAME=127.0.0.1
 
 # Absolute, and the app takes its data directory from this path's dirname.
 # server.js chdirs to the payload, so a relative path would land in install_dir.
 STORAGE_PROVIDER=sqlite
-STORAGE_SQLITE_PATH=__DATA_DIR__/libredb-storage.db
+STORAGE_SQLITE_PATH={{ data_dir }}/libredb-storage.db
 
-JWT_SECRET=__JWT_SECRET__
+JWT_SECRET={{ jwt_secret }}
+{%- if seed_config_path %}
+
+# This server's databases, written by the package (install question seed_databases).
+# The seed file names these passwords, so it holds none itself.
+SEED_CONFIG_PATH={{ seed_config_path }}
+{%- if mysql_seeded == "1" %}
+LIBREDB_YNH_MYSQL_PWD={{ mysql_admin_pwd }}
+{%- endif %}
+{%- if psql_databases != "[]" %}
+LIBREDB_YNH_PSQL_PWD={{ psql_admin_pwd }}
+{%- endif %}
+{%- endif %}

@@ -8,10 +8,54 @@ test_format = 1.0
     # route prefix is fixed at build time, so a sub-path install would 404 on
     # every asset. There is no path argument to vary.
 
+    # package_check turns a boolean whose default is false into 1, and this
+    # suite has no database server, so the install would stop on purpose.
+    args.seed_databases = 0
+
     # -------------------------------
     # Commits to test upgrade from
     # -------------------------------
 
-    # 60cabec is 0.16.2~ynh1, the version the catalogue served before this one,
-    # so this is the upgrade an existing install actually performs.
-    test_upgrade_from.60cabec.name = "Upgrade from 0.16.2~ynh1"
+    # b989bd4 is 0.17.0~ynh1, the version the catalogue serves before this one,
+    # so this is the upgrade an existing install actually performs. It has no
+    # seed_databases question, so it also proves an upgrade copes without it.
+    test_upgrade_from.b989bd4.name = "Upgrade from 0.17.0~ynh1"
+
+# The seed_databases question, once per database server, since the base system
+# installs neither. preinstall pulls the server in as an app dependency would,
+# then runs the regen-conf the apt helper runs after one. A suite does not
+# inherit the default suite's args, so each one sets its own.
+[mariadb]
+
+    only = ["install.root", "backup_restore", "upgrade"]
+
+    preinstall = """
+    sudo DEBIAN_FRONTEND=noninteractive apt-get install --yes mariadb-server
+    sudo yunohost tools regen-conf mysql
+    """
+
+    args.seed_databases = 1
+
+    # The permission is admins once the databases are connected.
+    [mariadb.curl_tests]
+    home.path = "/login"
+    home.logged_on_sso = true
+    home.logged_as_admin = true
+    home.expect_title = "LibreDB Studio"
+
+[postgresql]
+
+    only = ["install.root", "backup_restore", "upgrade"]
+
+    preinstall = """
+    sudo DEBIAN_FRONTEND=noninteractive apt-get install --yes postgresql
+    sudo yunohost tools regen-conf postgresql
+    """
+
+    args.seed_databases = 1
+
+    [postgresql.curl_tests]
+    home.path = "/login"
+    home.logged_on_sso = true
+    home.logged_as_admin = true
+    home.expect_title = "LibreDB Studio"
