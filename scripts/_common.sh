@@ -245,9 +245,9 @@ _db_admins_drop() {
         elif ! _mariadb_is_running; then
             ynh_print_warn "MariaDB is not running, so the account $mysql_admin_user is still on it. Start MariaDB and run: mysql -e \"DROP USER '$mysql_admin_user'@'localhost';\""
         else
-            if ynh_mysql_user_exists "$mysql_admin_user"; then
-                ynh_mysql_drop_user "$mysql_admin_user"
-            fi
+            # The localhost account only, like _mariadb_admin_ensure: ynh_mysql_user_exists
+            # matches the name on any host, and a drop of a missing account would stop the run.
+            mysql --batch <<< "DROP USER IF EXISTS '$mysql_admin_user'@'localhost';"
             ynh_app_setting_delete --key=mysql_admin_user
             ynh_app_setting_delete --key=mysql_admin_pwd
         fi
