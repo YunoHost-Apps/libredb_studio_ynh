@@ -30,6 +30,14 @@ ynh_backup "/etc/logrotate.d/$app"
 ynh_backup "/var/log/$app/"
 
 #=================================================
+# THE DATABASE ACCOUNTS
+#=================================================
+# Nothing to declare. The accounts the seed_databases question creates live in
+# the database servers, and their names and passwords are app settings, which
+# every backup carries. The restore creates them again from those settings and
+# rewrites the seed file for the servers of the machine it lands on.
+
+#=================================================
 # END OF SCRIPT
 #=================================================
 

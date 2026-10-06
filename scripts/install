@@ -1,5 +1,6 @@
 #!/bin/bash
 
+source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -19,11 +20,26 @@ ynh_script_progression "Setting up source files..."
 ynh_setup_source --dest_dir="$install_dir"
 
 #=================================================
+# CONNECT THIS SERVER'S DATABASES
+#=================================================
+# Before the service first starts, so the app is never reachable by more than
+# the admins group once the seed file exists.
+
+_seed_connections_configure
+
+if [ "$seed_databases" = "1" ]; then
+    if [ -z "$seed_config_path" ]; then
+        ynh_die "No running MariaDB or PostgreSQL server was found here, so there is nothing to connect. Install an app that uses one first, or install LibreDB Studio without connecting this server's databases."
+    fi
+    _main_permission_admins_only
+fi
+
+#=================================================
 # ADD A CONFIGURATION
 #=================================================
 ynh_script_progression "Adding $app's configuration..."
 
-ynh_config_add --template="env" --destination="$install_dir/.env"
+ynh_config_add --jinja --template="env" --destination="$install_dir/.env"
 
 #=================================================
 # SYSTEM CONFIGURATION
