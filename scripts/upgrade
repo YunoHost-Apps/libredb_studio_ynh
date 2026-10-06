@@ -19,7 +19,7 @@ if [ -z "${jwt_secret:-}" ]; then
     ynh_app_setting_set --key=jwt_secret --value="$jwt_secret"
 fi
 
-# 0.17.0~ynh1 and earlier had no seed_databases question: those installs keep
+# 0.18.0~ynh1 and earlier had no seed_databases question: those installs keep
 # working exactly as before.
 if [ -z "${seed_databases:-}" ]; then
     seed_databases=0

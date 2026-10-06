@@ -16,10 +16,10 @@ test_format = 1.0
     # Commits to test upgrade from
     # -------------------------------
 
-    # b989bd4 is 0.17.0~ynh1, the version the catalogue serves before this one,
+    # 94cd428 is 0.18.0~ynh1, the version the catalogue serves before this one,
     # so this is the upgrade an existing install actually performs. It has no
     # seed_databases question, so it also proves an upgrade copes without it.
-    test_upgrade_from.b989bd4.name = "Upgrade from 0.17.0~ynh1"
+    test_upgrade_from.94cd428.name = "Upgrade from 0.18.0~ynh1"
 
 # The seed_databases question, once per database server, since the base system
 # installs neither. preinstall pulls the server in as an app dependency would,
