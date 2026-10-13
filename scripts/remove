@@ -1,5 +1,6 @@
 #!/bin/bash
 
+source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -16,6 +17,17 @@ fi
 ynh_config_remove_systemd
 
 ynh_config_remove_nginx
+
+#=================================================
+# REMOVE THE DATABASE ACCOUNTS
+#=================================================
+# After the service is gone, so no session holds them.
+
+_db_admins_drop
+
+if [ -e "/etc/$app" ]; then
+    ynh_safe_rm "/etc/$app"
+fi
 
 #=================================================
 # END OF SCRIPT

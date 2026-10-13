@@ -1,0 +1,44 @@
+# Written by the package from the database servers running on this machine,
+# on every install, upgrade and restore. An edit here does not survive one.
+# It holds no password: each ${...} below is read from the app's .env.
+version: "1"
+
+defaults:
+  managed: true
+  environment: production
+
+connections:
+{%- if mysql_seeded == "1" %}
+  # One connection reaches every database on the server. It opens on the
+  # read-only information_schema, so an unqualified statement cannot land in
+  # the grant tables.
+  - id: "yunohost-mariadb"
+    name: "MariaDB on this server"
+    group: "YunoHost"
+    type: mysql
+    host: "127.0.0.1"
+    port: {{ mysql_port }}
+    database: "information_schema"
+    user: {{ mysql_admin_user | to_json }}
+    password: "${LIBREDB_YNH_MYSQL_PWD}"
+    ssl:
+      mode: disable
+    roles: ["admin"]
+    managed: true
+{%- endif %}
+  # PostgreSQL opens one database per connection, so each one is listed.
+{%- for db in psql_databases | from_json %}
+  - id: {{ db.id | to_json }}
+    name: {{ ("PostgreSQL: " ~ db.database) | to_json }}
+    group: "YunoHost"
+    type: postgres
+    host: "127.0.0.1"
+    port: {{ psql_port }}
+    database: {{ db.database | to_json }}
+    user: {{ psql_admin_user | to_json }}
+    password: "${LIBREDB_YNH_PSQL_PWD}"
+    ssl:
+      mode: disable
+    roles: ["admin"]
+    managed: true
+{%- endfor %}

@@ -1,5 +1,6 @@
 #!/bin/bash
 
+source ../settings/scripts/_common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -15,6 +16,22 @@ ynh_restore "$install_dir"
 ynh_script_progression "Restoring the data directory..."
 
 ynh_restore "$data_dir"
+
+#=================================================
+# RECONNECT THIS SERVER'S DATABASES
+#=================================================
+# The accounts are not in the archive, but their names and passwords are, in
+# the settings. They are created again on whichever servers this machine runs,
+# and the .env is rewritten so SEED_CONFIG_PATH matches what was found. The
+# permission is restored as it was; a wider one than admins is reported.
+
+_seed_connections_configure
+
+ynh_config_add --jinja --template="env" --destination="$install_dir/.env"
+
+if [ -n "$seed_config_path" ]; then
+    _main_permission_warn_if_wider
+fi
 
 #=================================================
 # RESTORE SYSTEM CONFIGURATIONS
