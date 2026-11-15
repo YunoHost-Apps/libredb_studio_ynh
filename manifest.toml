@@ -6,7 +6,7 @@ id = "libredb_studio"
 name = "LibreDB Studio"
 description.en = "Web SQL client for 18 database engines, with schema browser, ER diagrams and query editor"
 
-version = "1.2.0~ynh1"
+version = "1.3.0~ynh1"
 
 maintainers = ["yusuf-gundogdu"]
 
@@ -42,10 +42,10 @@ ram.runtime = "250M"
 
 [resources]
     [resources.sources.main]
-    amd64.url = "https://github.com/libredb/libredb-studio/releases/download/1.2.0/libredb-studio-standalone-1.2.0-linux-x64.tar.gz"
-    amd64.sha256 = "0b3771fcd91cedbeb577e9861c108b6ae71af1f27ce4f5b55691222a037ac8b7"
-    arm64.url = "https://github.com/libredb/libredb-studio/releases/download/1.2.0/libredb-studio-standalone-1.2.0-linux-arm64.tar.gz"
-    arm64.sha256 = "97b8a5dd2675fde38c9fc944b9abe8b04ce45da7798bd42d7e197a20b15f61a3"
+    amd64.url = "https://github.com/libredb/libredb-studio/releases/download/1.3.0/libredb-studio-standalone-1.3.0-linux-x64.tar.gz"
+    amd64.sha256 = "b1043d2f8c0e5e7201f2855b69273a27c510f55a27e286af0e312ea87fbbc4a8"
+    arm64.url = "https://github.com/libredb/libredb-studio/releases/download/1.3.0/libredb-studio-standalone-1.3.0-linux-arm64.tar.gz"
+    arm64.sha256 = "2d1f395c3f0f8e19181893dd86176775622164a7e7c92bd9b4fde522fba8600c"
 
     # Anchored: 28 assets are published and several share this prefix.
     autoupdate.strategy = "latest_github_release"
