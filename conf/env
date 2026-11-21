@@ -9,4 +9,8 @@ HOSTNAME=127.0.0.1
 STORAGE_PROVIDER=sqlite
 STORAGE_SQLITE_PATH=__DATA_DIR__/libredb-storage.db
 
+# The built-in sample databases ship in the payload's seed-assets directory, and
+# LibreDB Studio reads it from SEED_ASSETS_DIR, never from its working directory.
+SEED_ASSETS_DIR=__INSTALL_DIR__/seed-assets
+
 JWT_SECRET=__JWT_SECRET__
